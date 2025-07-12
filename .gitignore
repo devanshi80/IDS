@@ -1,0 +1,37 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.so
+
+# Jupyter
+*.ipynb_checkpoints
+
+# Logs
+logs/
+*.log
+
+# Models
+models/
+*.pkl
+
+# Environments
+.venv/
+env/
+venv/
+*.env
+
+# MacOS & system
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Streamlit
+.streamlit/
+
+# Uploaded files
+*.csv
+!data/sample_input.csv  # Keep a sample input if you want
+
+# Ignore risk logs
+risk_scores.csv
