@@ -1,4 +1,4 @@
-# 🛡️ Smart Threat Detection
+# 🛡️ Smart Intrusion Detection System
 
 A real-time, ML-powered system to detect potentially malicious bot-related activity by scanning open network ports on your machine. Built with ensemble learning, SHAP explainability, and an interactive Streamlit UI.
 
