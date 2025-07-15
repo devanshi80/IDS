@@ -1,46 +1,54 @@
-# src/model_trainer.py
-import pickle
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+import joblib
+import numpy as np
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import classification_report
+from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix
 
 def train_and_save_model(df, model_path):
+    # Separate features and label
     X = df.drop("Label", axis=1)
     y = df["Label"]
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Split dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
-    # Define individual classifiers
-    clf1 = LogisticRegression(max_iter=1000)
-    clf2 = RandomForestClassifier(n_estimators=100, random_state=42)
-    clf3 = XGBClassifier(use_label_encoder=False, eval_metric='logloss', verbosity=0)
-    clf4 = MLPClassifier(max_iter=300)
-    clf5 = SVC(probability=True)
+    # Scale features for models that need it
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
 
-    # Voting Classifier
-    voting_clf = VotingClassifier(
-        estimators=[
-            ('lr', clf1),
-            ('rf', clf2),
-            ('xgb', clf3),
-            ('mlp', clf4),
-            ('svc', clf5)
-        ],
-        voting='soft'  # Use soft voting for probabilities
-    )
+    # Individual models
+    logreg = LogisticRegression(max_iter=1000, random_state=42)
+    rf = RandomForestClassifier(n_estimators=100, random_state=42)
+    mlp = MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500, random_state=42)
+    xgb = XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
 
-    voting_clf.fit(X_train, y_train)
+    # Train individual models
+    logreg.fit(X_train_scaled, y_train)
+    rf.fit(X_train, y_train)             # Tree-based: unscaled
+    mlp.fit(X_train_scaled, y_train)
+    xgb.fit(X_train, y_train)
+
+    # Voting Classifier: mix scaled and unscaled where appropriate
+    voting_clf = VotingClassifier(estimators=[
+        ('logreg', logreg),
+        ('mlp', mlp),
+        ('xgb', xgb)
+    ], voting='soft')
+
+    voting_clf.fit(X_train_scaled, y_train)
 
     # Evaluate
-    y_pred = voting_clf.predict(X_test)
-    print("Voting Classifier Report:\n", classification_report(y_test, y_pred))
+    y_pred = voting_clf.predict(X_test_scaled)
+    print("\n Classification Report:\n", classification_report(y_test, y_pred))
+    print(" Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 
-    # Save ensemble model
-    with open(model_path, 'wb') as f:
-        pickle.dump(voting_clf, f)
+    # Save model and scaler
+    joblib.dump((voting_clf, scaler), model_path)
+    print(f" VotingClassifier saved to {model_path}")
 
-    return voting_clf
