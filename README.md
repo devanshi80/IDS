@@ -4,7 +4,7 @@ A real-time, ML-powered system to detect potentially malicious bot-related activ
 
 ---
 
-## 🚀 Project Overview
+## Project Overview
 
 Smart Threat Detection is an intelligent threat monitoring tool that scans your local machine for open ports and classifies each port as **benign** or **bot-related** using a trained ensemble ML model. It combines insights from five popular classifiers using a soft-voting strategy and provides **transparent, explainable results** using SHAP (SHapley Additive exPlanations).
 
@@ -21,16 +21,16 @@ Built to demonstrate full-stack machine learning + system-level monitoring for M
   - MLP Classifier
   - Support Vector Machine (SVM)
 
-- 🔍 **Real-Time Port Scanning** using `psutil`
-- 🧠 **Model Explainability** via SHAP waterfall plots
-- 🌐 **Interactive Streamlit UI** for port scanning, CSV uploads, and visual feedback
-- 📈 **Risk Scoring System** with automatic logging to CSV
-- 🧪 **CLI Interface** for training and scanning
-- 🔧 **Modular Codebase** for easy extension and maintenance
+- **Real-Time Port Scanning** using `psutil`
+- **Model Explainability** via SHAP waterfall plots
+- **Interactive Streamlit UI** for port scanning, CSV uploads, and visual feedback
+- **Risk Scoring System** with automatic logging to CSV
+- **CLI Interface** for training and scanning
+- **Modular Codebase** for easy extension and maintenance
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 
@@ -57,7 +57,7 @@ smart\_threat\_detection/
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/SmartThreatDetection.git
@@ -67,7 +67,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🖥️ Run the Streamlit App (UI)
+## Run the Streamlit App (UI)
 
 ```bash
 streamlit run streamlit_app.py
@@ -83,15 +83,15 @@ streamlit run streamlit_app.py
 
 ---
 
-## 🧪 Run via CLI
+## Run via CLI
 
-### 🔹 Train the Model
+### Train the Model
 
 ```bash
 python app.py --train
 ```
 
-### 🔹 Scan & Classify Ports
+### Scan & Classify Ports
 
 ```bash
 python app.py --scan
@@ -99,9 +99,9 @@ python app.py --scan
 
 ---
 
-## 📊 Risk Score Logging
+## Risk Score Logging
 
-Every prediction is automatically logged to `logs/risk_scores.csv` with:
+Every prediction is automatically logged to `risk_scores.csv` with:
 
 * Timestamp
 * Port number
@@ -111,29 +111,24 @@ Every prediction is automatically logged to `logs/risk_scores.csv` with:
 
 ---
 
-## 🔍 SHAP Explainability
+## SHAP Explainability
 
 Uses SHAP to visualize feature contributions for each prediction, increasing trust and transparency in the ensemble model.
 
 * SHAP waterfall plots are displayed directly in the Streamlit app
 * Great for interviews and interpretability
 
----
-
-## 📈 Example Screenshot
-
-> *(Optional: Insert screenshot or gif of Streamlit UI or SHAP output here)*
 
 ---
 
-## 🛡️ Dataset Used
+##  Dataset Used
 
 * **CICIDS2017** – Friday-WorkingHours Morning subset
 * Preprocessed and mapped: `BENIGN` = 0, others = 1 (bot-like)
 
 ---
 
-## 📌 Dependencies
+## Dependencies
 
 * `scikit-learn`
 * `xgboost`
@@ -151,23 +146,22 @@ pip install -r requirements.txt
 
 ---
 
-## 👩‍💻 Author
+## Author
 
 **Devanshi Jain**
 
 ---
 
-## 📜 License
+## License
 
 This project is open-source and available under the MIT License.
 
 ---
 
-## 🙌 Acknowledgments
+## Acknowledgments
 
 * CICIDS2017 Dataset - Canadian Institute for Cybersecurity
 * SHAP - Explainable AI Toolkit
 * Streamlit - ML dashboard framework
-* MLH Fellowship team for the opportunity to showcase this work
 
 ---
