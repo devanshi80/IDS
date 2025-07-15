@@ -1,28 +1,24 @@
-import pandas as pd
+import csv
 import os
-from datetime import datetime
 
-LOG_PATH = "logs/risk_scores.csv"
+def log_risk_score(input_dict, prediction, probability, log_path):
+    """
+    Logs input values, prediction, and probability to CSV.
+    Creates the file with headers if it doesn’t exist.
+    """
+    fieldnames = list(input_dict.keys()) + ['Prediction', 'Probability']
 
-def log_prediction(port, prob, label):
-    risk = (
-        "Critical" if prob >= 0.9 else
-        "High" if prob >= 0.7 else
-        "Medium" if prob >= 0.4 else
-        "Low"
-    )
-    log_data = {
-        "timestamp": datetime.now().isoformat(),
-        "port": port,
-        "probability": round(prob * 100, 2),
-        "label": "BOT" if label == 1 else "BENIGN",
-        "risk": risk
-    }
+    log_exists = os.path.isfile(log_path)
 
-    if not os.path.exists(LOG_PATH):
-        df = pd.DataFrame([log_data])
-    else:
-        df = pd.read_csv(LOG_PATH)
-        df = pd.concat([df, pd.DataFrame([log_data])], ignore_index=True)
+    with open(log_path, mode='a', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
 
-    df.to_csv(LOG_PATH, index=False)
+        if not log_exists:
+            writer.writeheader()
+
+        row = input_dict.copy()
+        row['Prediction'] = prediction
+        row['Probability'] = round(probability, 4)
+
+        writer.writerow(row)
+
