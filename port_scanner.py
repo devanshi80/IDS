@@ -10,5 +10,4 @@ def scan_ports():
     return open_ports
 
 def build_feature_vector(ports):
-    # Example: convert ports into vectorized features (basic version)
     return [{"port": p} for p in ports]
